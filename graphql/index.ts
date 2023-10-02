@@ -54,9 +54,39 @@ export const createUserMutation = `
 	}
 `;
 
-export const projectsQuery = `
-  query getProjects($category: String, $endCursor: String) {
-    projectSearch(first: 1, after: $endCursor, filter: {category: {eq: $category}}) {
+export const projectsQueryAll = `
+  query getProjects($endcursor: String) {
+    projectSearch(first: 8, after: $endcursor) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          title
+          githubUrl
+          description
+          liveSiteUrl
+          id
+          image
+          category
+          createdBy {
+            id
+            email
+            name
+            avatarUrl
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const projectsQueryWithFilter = `
+  query getProjects($category: String, $endcursor: String) {
+    projectSearch(first: 8, after: $endcursor, filter: {category: {eq: $category}}) {
       pageInfo {
         hasNextPage
         hasPreviousPage
@@ -134,36 +164,6 @@ export const getProjectsOfUserQuery = `
             id
             title
             image
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const allProject = `
-  query getAllProjects($endcursor: String) {
-    projectSearch(first: 8, after: $endcursor) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          title
-          githubUrl
-          description
-          liveSiteUrl
-          id
-          image
-          category
-          createdBy {
-            id
-            email
-            name
-            avatarUrl
           }
         }
       }

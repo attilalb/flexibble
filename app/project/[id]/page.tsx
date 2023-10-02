@@ -1,11 +1,13 @@
-import { ProjectInterface } from "@/common.types";
+import Image from "next/image";
+import Link from "next/link";
+
+import { getCurrentUser } from "@/lib/session";
+import { getProjectDetails } from "@/lib/actions";
+
 import Modal from "@/components/Modal";
 import ProjectActions from "@/components/ProjectActions";
 import RelatedProjects from "@/components/RelatedProjects";
-import { getProjectDetails } from "@/lib/actions";
-import { getCurrentUser } from "@/lib/session";
-import Image from "next/image";
-import Link from "next/link";
+import { ProjectInterface } from "@/common.types";
 
 const Project = async ({ params: { id } }: { params: { id: string } }) => {
   const session = await getCurrentUser();
@@ -13,9 +15,8 @@ const Project = async ({ params: { id } }: { params: { id: string } }) => {
     project?: ProjectInterface;
   };
 
-  if (!result?.project) {
-    <p>Failed to fetch project information.</p>;
-  }
+  if (!result?.project)
+    return <p className="no-result-text">Failed to fetch project info</p>;
 
   const projectDetails = result?.project;
 
@@ -43,7 +44,7 @@ const Project = async ({ params: { id } }: { params: { id: string } }) => {
               <Link href={renderLink()}>{projectDetails?.createdBy?.name}</Link>
               <Image src="/dot.svg" width={4} height={4} alt="dot" />
               <Link
-                href={`/?category=${projectDetails?.category}`}
+                href={`/?category=${projectDetails.category}`}
                 className="text-primary-purple font-semibold"
               >
                 {projectDetails?.category}
